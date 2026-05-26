@@ -254,13 +254,9 @@ http://localhost:5173
 
 # 📸 Screenshots
 
-Add screenshots here:
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c75fb762-3bd3-498d-8ce4-15ab16ebc2c9" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3483677c-7f65-419b-ad63-7d0ec0c52ad0" />
 
-- Dashboard Overview
-- Upload Workflow
-- Suspicious Record Detection
-- Approval Workflow
-- Audit Logs
 
 ---
 
@@ -288,9 +284,3 @@ Deployed using Render Static Site.
 # 👨‍💻 Author
 
 Basavva Sangenavar
-
----
-
-# 📄 License
-
-This project is for educational and demonstration purposes.
