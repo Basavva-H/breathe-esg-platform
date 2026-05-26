@@ -46,7 +46,7 @@ function App() {
     try {
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/records/"
+        "https://breathe-esg-backend-b7pe.onrender.com/api/records/"
       );
 
       setRecords(response.data);
@@ -79,7 +79,7 @@ function App() {
     try {
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/upload/sap/",
+        "https://breathe-esg-backend-b7pe.onrender.com/api/upload/sap/",
         formData
       );
 
@@ -110,7 +110,7 @@ function App() {
     try {
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/upload/utility/",
+        "https://breathe-esg-backend-b7pe.onrender.com/api/upload/utility/",
         formData
       );
 
@@ -141,7 +141,7 @@ function App() {
     try {
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/upload/travel/",
+        "https://breathe-esg-backend-b7pe.onrender.com/api/upload/travel/",
         formData
       );
 
@@ -162,7 +162,7 @@ function App() {
     try {
 
       await axios.post(
-        `http://127.0.0.1:8000/api/records/${id}/approve/`
+        `https://breathe-esg-backend-b7pe.onrender.com/api/records/${id}/approve/`
       );
 
       setMessage("Record approved successfully");
@@ -182,7 +182,7 @@ function App() {
     try {
 
       await axios.post(
-        `http://127.0.0.1:8000/api/records/${id}/reject/`
+        `https://breathe-esg-backend-b7pe.onrender.com/api/records/${id}/reject/`
       );
 
       setMessage("Record rejected successfully");
