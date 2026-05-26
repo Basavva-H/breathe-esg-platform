@@ -458,7 +458,205 @@ function App() {
                 </div>
 
               </div>
+              
 
+              {/* Search + Filter */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10 mb-6">
+
+  <input
+    type="text"
+    placeholder="Search activity..."
+    value={searchTerm}
+    onChange={(e) =>
+      setSearchTerm(e.target.value)
+    }
+    className="p-3 rounded border"
+  />
+
+  <select
+    value={statusFilter}
+    onChange={(e) =>
+      setStatusFilter(e.target.value)
+    }
+    className="p-3 rounded border"
+  >
+
+    <option value="all">
+      All Status
+    </option>
+
+    <option value="pending">
+      Pending
+    </option>
+
+    <option value="approved">
+      Approved
+    </option>
+
+    <option value="rejected">
+      Rejected
+    </option>
+
+  </select>
+
+</div>
+
+{/* Records Table */}
+<div className="bg-white rounded-xl shadow p-6 mt-4">
+
+  <h2 className="text-3xl font-bold mb-6">
+    Uploaded Emission Records
+  </h2>
+
+  <div className="overflow-x-auto">
+
+    <table className="w-full border-collapse">
+
+      <thead>
+
+        <tr className="bg-gray-200">
+
+          <th className="p-3 text-left">
+            ID
+          </th>
+
+          <th className="p-3 text-left">
+            Category
+          </th>
+
+          <th className="p-3 text-left">
+            Activity
+          </th>
+
+          <th className="p-3 text-left">
+            Quantity
+          </th>
+
+          <th className="p-3 text-left">
+            Status
+          </th>
+
+          <th className="p-3 text-left">
+            Validation
+          </th>
+
+          <th className="p-3 text-left">
+            Actions
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        {
+          filteredRecords.map((record) => (
+
+            <tr
+              key={record.id}
+              className="border-b"
+            >
+
+              <td className="p-3">
+                {record.id}
+              </td>
+
+              <td className="p-3">
+                {record.category}
+              </td>
+
+              <td className="p-3">
+                {record.activity_type}
+              </td>
+
+              <td className="p-3">
+                {record.quantity} {record.unit}
+              </td>
+
+              <td className="p-3">
+
+                <span
+                  className={`px-3 py-1 rounded-full text-sm
+                  ${
+                    record.status === "approved"
+                      ? "bg-green-100 text-green-700"
+                      : record.status === "rejected"
+                      ? "bg-red-100 text-red-700"
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
+
+                  {record.status}
+
+                </span>
+
+              </td>
+
+              <td className="p-3">
+
+                {
+                  record.suspicious_flag
+                    ? "⚠️ Suspicious"
+                    : "✅ Valid"
+                }
+
+              </td>
+
+              <td className="p-3">
+
+                {
+                  record.status === "pending" ? (
+
+                    <div className="flex gap-2">
+
+                      {
+                        !record.suspicious_flag && (
+
+                          <button
+                            onClick={() =>
+                              approveRecord(record.id)
+                            }
+                            className="bg-green-600 text-white px-3 py-1 rounded"
+                          >
+                            Approve
+                          </button>
+                        )
+                      }
+
+                      <button
+                        onClick={() =>
+                          rejectRecord(record.id)
+                        }
+                        className="bg-red-600 text-white px-3 py-1 rounded"
+                      >
+                        Reject
+                      </button>
+
+                    </div>
+
+                  ) : (
+
+                    <span className="text-gray-500">
+                      Locked
+                    </span>
+
+                  )
+                }
+
+              </td>
+
+            </tr>
+          ))
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
             </div>
 
           ) : (
