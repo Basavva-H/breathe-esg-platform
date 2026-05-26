@@ -1,109 +1,98 @@
-# 🌍 ESG Data Ingestion & Compliance Review Platform
+# ESG Data Ingestion Platform
 
-A full-stack ESG (Environmental, Social, and Governance) data ingestion and analyst review platform built using **Django REST Framework**, **React**, and **Tailwind CSS**.
+A full-stack ESG (Environmental, Social, and Governance) data ingestion and validation platform built using React, Django REST Framework, and Tailwind CSS.
 
-The platform ingests emissions-related data from multiple enterprise sources, validates suspicious records, supports analyst approval workflows, maintains audit logs, and provides a live operational dashboard.
+The platform allows organizations to upload ESG-related datasets, validate records, flag suspicious entries, approve/reject records, and track all actions through audit logs.
 
 ---
 
-# 🚀 Live Demo
+# 🌐 Live Demo
 
 ## Frontend
-https://your-frontend-url.onrender.com
+https://breathe-esg-frontend-f575.onrender.com
 
 ## Backend API
 https://breathe-esg-backend-b7pe.onrender.com
 
 ---
 
-# 📌 Features
+# 🚀 Features
 
-## ✅ Multi-Source ESG Data Ingestion
-
-Supports ingestion from:
-
-- SAP fuel/procurement CSV files
-- Utility electricity CSV files
-- Corporate travel JSON files
+## ✅ Data Upload Modules
+- Upload SAP fuel CSV files
+- Upload utility usage CSV files
+- Upload travel JSON files
 
 ---
 
-## ✅ ESG Scope Classification
-
-| Source | ESG Scope |
-|---|---|
-| SAP Fuel Data | Scope 1 |
-| Utility Electricity | Scope 2 |
-| Travel Data | Scope 3 |
+## ✅ ESG Record Management
+- View uploaded emission records
+- Approve valid records
+- Reject suspicious or invalid records
+- Locked records after approval/rejection
 
 ---
 
 ## ✅ Validation Engine
-
-Detects suspicious records such as:
-
+Automatically detects suspicious records such as:
 - Negative quantities
-- Invalid units
-- Invalid plant codes
-- Missing fields
-- Invalid billing periods
-- Unsupported travel modes
-- Invalid travel distances
+- Invalid/null values
+- Suspicious activity entries
+- Unusual emission quantities
 
 ---
 
-## ✅ Analyst Review Workflow
-
-Analysts can:
-
-- Approve valid records
-- Reject suspicious records
-- Lock finalized records
-
-### Business Rules
-
-- Valid records → Approve / Reject
-- Suspicious records → Reject only
-- Locked records → Immutable
+## ✅ Dashboard Analytics
+Includes:
+- Total records count
+- Approved records count
+- Rejected records count
+- Suspicious records count
 
 ---
 
-## ✅ Audit Logging
-
-Tracks:
-
-- Record actions
-- Status transitions
-- Approval history
-- Rejection history
+## ✅ Search & Filtering
+- Search records by activity type
+- Filter records by status:
+  - Pending
+  - Approved
+  - Rejected
 
 ---
 
-## ✅ Dashboard Features
+## ✅ Authentication
+- JWT-based login system
+- Protected routes using React Router
+- Secure logout functionality
 
-- Upload ESG datasets
-- Live records table
-- Status indicators
-- Search functionality
-- Status filtering
-- Dashboard analytics cards
+---
+
+## ✅ Audit Logs
+Separate audit logs page that tracks:
+- Approved actions
+- Rejected actions
+- Previous status
+- Updated status
+- Timestamp history
 
 ---
 
 # 🛠️ Tech Stack
 
-## Backend
-- Django
-- Django REST Framework
-- SQLite
-- Pandas
-- Gunicorn
-
 ## Frontend
-- React
+- React.js
 - Vite
 - Tailwind CSS
 - Axios
+- React Router DOM
+
+## Backend
+- Django
+- Django REST Framework
+- Simple JWT Authentication
+
+## Database
+- SQLite
 
 ## Deployment
 - Render
@@ -112,28 +101,35 @@ Tracks:
 
 # 📂 Project Structure
 
-```bash
+```text
 breathe_esg/
 │
 ├── config/
+│
 ├── emissions/
 │   ├── services/
-│   │   ├── sap_processor.py
-│   │   ├── utility_processor.py
-│   │   └── travel_processor.py
-│   │
+│   ├── migrations/
 │   ├── models.py
-│   ├── views.py
 │   ├── serializers.py
+│   ├── views.py
 │   └── urls.py
 │
 ├── frontend/
 │   ├── src/
-│   └── public/
+│   │   ├── App.jsx
+│   │   ├── Login.jsx
+│   │   ├── AuditLogs.jsx
+│   │   ├── main.jsx
+│   │   └── index.css
+│   │
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
 │
 ├── requirements.txt
 ├── build.sh
-└── manage.py
+├── manage.py
+└── README.md
 ```
 
 ---
@@ -143,8 +139,11 @@ breathe_esg/
 ## Clone Repository
 
 ```bash
-git clone <your-github-repo-url>
-cd breathe_esg
+git clone https://github.com/Basavva-H/breathe-esg-platform.git
+```
+
+```bash
+cd breathe-esg-platform
 ```
 
 ---
@@ -155,7 +154,16 @@ cd breathe_esg
 
 ```bash
 python -m venv venv
+```
+
+```bash
 venv\Scripts\activate
+```
+
+### Linux / Mac
+
+```bash
+source venv/bin/activate
 ```
 
 ---
@@ -184,7 +192,7 @@ python manage.py createsuperuser
 
 ---
 
-## Start Backend Server
+## Run Backend Server
 
 ```bash
 python manage.py runserver
@@ -192,7 +200,7 @@ python manage.py runserver
 
 Backend runs at:
 
-```bash
+```text
 http://127.0.0.1:8000
 ```
 
@@ -224,7 +232,7 @@ npm run dev
 
 Frontend runs at:
 
-```bash
+```text
 http://localhost:5173
 ```
 
@@ -234,53 +242,83 @@ http://localhost:5173
 
 ## Upload APIs
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/upload/sap/` | Upload SAP CSV |
-| POST | `/api/upload/utility/` | Upload Utility CSV |
-| POST | `/api/upload/travel/` | Upload Travel JSON |
+| Method | Endpoint |
+|---|---|
+| POST | /api/upload/sap/ |
+| POST | /api/upload/utility/ |
+| POST | /api/upload/travel/ |
 
 ---
 
 ## Record APIs
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/records/` | Fetch all records |
-| POST | `/api/records/<id>/approve/` | Approve record |
-| POST | `/api/records/<id>/reject/` | Reject record |
+| Method | Endpoint |
+|---|---|
+| GET | /api/records/ |
+| POST | /api/records/<id>/approve/ |
+| POST | /api/records/<id>/reject/ |
+
+---
+
+## Audit Logs API
+
+| Method | Endpoint |
+|---|---|
+| GET | /api/audit-logs/ |
+
+---
+
+## Authentication APIs
+
+| Method | Endpoint |
+|---|---|
+| POST | /api/token/ |
+| POST | /api/token/refresh/ |
+
+---
+
+# 🔐 Demo Login Credentials
+
+```text
+Username: admin
+Password: admin123
+```
 
 ---
 
 # 📸 Screenshots
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c75fb762-3bd3-498d-8ce4-15ab16ebc2c9" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3483677c-7f65-419b-ad63-7d0ec0c52ad0" />
+## Dashboard
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9bc5baff-d0c3-420d-bf30-f0dde200c27c" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d4ab0d7a-a320-46f9-ac08-c0b31667d21e" />
+
+## Audit Logs
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/48077e44-09f7-419a-acf7-958de84d2b9d" />
+
+
+## Login Page
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/853d505c-27e8-40d2-87f1-b088e32f9082" />
 
 
 ---
 
 # 🌍 Deployment
 
-## Backend
-Deployed using Render Web Service.
-
 ## Frontend
-Deployed using Render Static Site.
+Deployed on Render Static Site.
+
+## Backend
+Deployed on Render Web Service.
 
 ---
 
-# 📈 Future Enhancements
-
-- Authentication & Role-Based Access
-- Charts & ESG Analytics
-- CSV Export
-- PostgreSQL Integration
-- Cloud Storage
-- Advanced Audit Reporting
-
----
 
 # 👨‍💻 Author
 
-Basavva Sangenavar
+## Basavva Sangenaver
+
+
+# 📄 License
+
+This project is developed for educational and assignment purposes.
