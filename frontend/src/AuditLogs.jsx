@@ -3,7 +3,8 @@ import axios from "axios";
 
 import {
   Link,
-  Navigate
+  Navigate,
+  useNavigate
 } from "react-router-dom";
 
 function AuditLogs() {
@@ -13,7 +14,7 @@ function AuditLogs() {
   const token = localStorage.getItem(
     "access_token"
   );
-
+const navigate = useNavigate();
   const fetchAuditLogs = async () => {
 
     try {
@@ -73,8 +74,7 @@ function AuditLogs() {
               "access_token"
             );
 
-            window.location.href =
-              "/login";
+            navigate("/login");
           }}
           className="bg-red-600 text-white px-4 py-2 rounded"
         >

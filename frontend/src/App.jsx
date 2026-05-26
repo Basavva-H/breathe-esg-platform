@@ -5,7 +5,8 @@ import {
   Routes,
   Route,
   Link,
-  Navigate
+  Navigate,
+  useNavigate
 } from "react-router-dom";
 
 import Login from "./Login";
@@ -29,7 +30,7 @@ function App() {
   const token = localStorage.getItem(
     "access_token"
   );
-
+  const navigate = useNavigate();
   // Dashboard Stats
   const totalRecords = records.length;
 
@@ -298,8 +299,7 @@ function App() {
                       "access_token"
                     );
 
-                    window.location.href =
-                      "/login";
+                    navigate("/login");
                   }}
                   className="bg-red-600 text-white px-4 py-2 rounded"
                 >
