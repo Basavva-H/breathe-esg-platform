@@ -121,3 +121,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 CORS_ALLOW_ALL_ORIGINS = True
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+    ),
+}

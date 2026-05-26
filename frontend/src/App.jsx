@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+import Login from "./Login";
+import AuditLogs from "./AuditLogs";
 
+const token = localStorage.getItem(
+  "access_token"
+);
 function App() {
 
   const [sapFile, setSapFile] = useState(null);
@@ -60,19 +70,19 @@ function App() {
 
   const fetchAuditLogs = async () => {
 
-  try {
+    try {
 
-    const response = await axios.get(
-      "https://breathe-esg-backend-b7pe.onrender.com/api/audit-logs/"
-    );
+      const response = await axios.get(
+        "https://breathe-esg-backend-b7pe.onrender.com/api/audit-logs/"
+      );
 
-    setAuditLogs(response.data);
+      setAuditLogs(response.data);
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error(error);
-  }
-};
+      console.error(error);
+    }
+  };
   // Load records when page loads
   useEffect(() => {
 
@@ -215,414 +225,403 @@ function App() {
       setMessage("Rejection failed");
     }
   };
+
+  if (!token) {
+
+  window.location.href = "/login";
+}
   return (
 
-    <div className="min-h-screen bg-gray-100 p-10">
+    <Routes>
 
-      <h1 className="text-4xl font-bold mb-8">
-        ESG Data Ingestion Platform
-      </h1>
+      <Route
+  path="/login"
+  element={<Login />}
+/>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <Route
+        path="/"
+        element={
+          <div className="min-h-screen bg-gray-100 p-10">
 
-        {/* Total Records */}
-        <div className="bg-white p-6 rounded-xl shadow">
+            <div className="flex gap-4 mb-8">
 
-          <h2 className="text-gray-500 text-lg">
-            Total Records
-          </h2>
+              <Link
+                to="/"
+                className="bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                Dashboard
+              </Link>
 
-          <p className="text-4xl font-bold mt-2">
-            {totalRecords}
-          </p>
+              <Link
+                to="/audit-logs"
+                className="bg-gray-700 text-white px-4 py-2 rounded"
+              >
+                Audit Logs
+              </Link>
 
-        </div>
+              <button
+          onClick={() => {
 
-        {/* Approved */}
-        <div className="bg-green-100 p-6 rounded-xl shadow">
+            localStorage.removeItem(
+              "access_token"
+            );
 
-          <h2 className="text-green-700 text-lg">
-            Approved
-          </h2>
+            window.location.href = "/login";
+          }}
+          className="bg-red-600 text-white px-4 py-2 rounded"
+        >
+          Logout
+        </button>
 
-          <p className="text-4xl font-bold mt-2 text-green-800">
-            {approvedCount}
-          </p>
+            </div>
 
-        </div>
+            <h1 className="text-4xl font-bold mb-8">
+              ESG Data Ingestion Platform
+            </h1>
 
-        {/* Rejected */}
-        <div className="bg-red-100 p-6 rounded-xl shadow">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
 
-          <h2 className="text-red-700 text-lg">
-            Rejected
-          </h2>
+              {/* Total Records */}
+              <div className="bg-white p-6 rounded-xl shadow">
 
-          <p className="text-4xl font-bold mt-2 text-red-800">
-            {rejectedCount}
-          </p>
+                <h2 className="text-gray-500 text-lg">
+                  Total Records
+                </h2>
 
-        </div>
+                <p className="text-4xl font-bold mt-2">
+                  {totalRecords}
+                </p>
 
-        {/* Suspicious */}
-        <div className="bg-yellow-100 p-6 rounded-xl shadow">
+              </div>
 
-          <h2 className="text-yellow-700 text-lg">
-            Suspicious
-          </h2>
+              {/* Approved */}
+              <div className="bg-green-100 p-6 rounded-xl shadow">
 
-          <p className="text-4xl font-bold mt-2 text-yellow-800">
-            {suspiciousCount}
-          </p>
+                <h2 className="text-green-700 text-lg">
+                  Approved
+                </h2>
 
-        </div>
+                <p className="text-4xl font-bold mt-2 text-green-800">
+                  {approvedCount}
+                </p>
 
-      </div>
+              </div>
 
-      {
-        message && (
-          <div className="bg-green-100 text-green-800 p-4 rounded mb-6">
-            {message}
-          </div>
-        )
-      }
+              {/* Rejected */}
+              <div className="bg-red-100 p-6 rounded-xl shadow">
 
-      {/* Upload Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <h2 className="text-red-700 text-lg">
+                  Rejected
+                </h2>
 
-        {/* SAP Upload */}
-        <div className="bg-white p-6 rounded-xl shadow">
+                <p className="text-4xl font-bold mt-2 text-red-800">
+                  {rejectedCount}
+                </p>
 
-          <h2 className="text-2xl font-semibold mb-4">
-            SAP Fuel Data
-          </h2>
+              </div>
 
-          <input
-            type="file"
-            className="mb-4"
-            onChange={(e) =>
-              setSapFile(e.target.files[0])
+              {/* Suspicious */}
+              <div className="bg-yellow-100 p-6 rounded-xl shadow">
+
+                <h2 className="text-yellow-700 text-lg">
+                  Suspicious
+                </h2>
+
+                <p className="text-4xl font-bold mt-2 text-yellow-800">
+                  {suspiciousCount}
+                </p>
+
+              </div>
+
+            </div>
+
+            {
+              message && (
+                <div className="bg-green-100 text-green-800 p-4 rounded mb-6">
+                  {message}
+                </div>
+              )
             }
-          />
-
-          <button
-            onClick={uploadSapFile}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Upload SAP CSV
-          </button>
-
-        </div>
-
-        {/* Utility Upload */}
-        <div className="bg-white p-6 rounded-xl shadow">
-
-          <h2 className="text-2xl font-semibold mb-4">
-            Utility Data
-          </h2>
-
-          <input
-            type="file"
-            className="mb-4"
-            onChange={(e) =>
-              setUtilityFile(e.target.files[0])
-            }
-          />
-
-          <button
-            onClick={uploadUtilityFile}
-            className="bg-green-600 text-white px-4 py-2 rounded"
-          >
-            Upload Utility CSV
-          </button>
-
-        </div>
-
-        {/* Travel Upload */}
-        <div className="bg-white p-6 rounded-xl shadow">
-
-          <h2 className="text-2xl font-semibold mb-4">
-            Travel Data
-          </h2>
-
-          <input
-            type="file"
-            className="mb-4"
-            onChange={(e) =>
-              setTravelFile(e.target.files[0])
-            }
-          />
-
-          <button
-            onClick={uploadTravelFile}
-            className="bg-purple-600 text-white px-4 py-2 rounded"
-          >
-            Upload Travel JSON
-          </button>
-
-        </div>
-
-      </div>
-
-<div className="flex flex-col md:flex-row gap-4 mt-8 mb-6">
-  {/* Search */}
-  <input
-    type="text"
-    placeholder="Search activity..."
-    value={searchTerm}
-    onChange={(e) =>
-      setSearchTerm(e.target.value)
-    }
-    className="border p-3 rounded w-full md:w-1/2"
-  />
-
-  {/* Status Filter */}
-  <select
-    value={statusFilter}
-    onChange={(e) =>
-      setStatusFilter(e.target.value)
-    }
-    className="border p-3 rounded w-full md:w-1/4"
-  >
-
-    <option value="all">
-      All Status
-    </option>
 
-    <option value="pending">
-      Pending
-    </option>
-
-    <option value="approved">
-      Approved
-    </option>
-
-    <option value="rejected">
-      Rejected
-    </option>
-
-  </select>
-
-</div>
-
-      {/* Records Table */}
-      <div className="mt-10 bg-white rounded-xl shadow p-6">
-
-        <h2 className="text-2xl font-bold mb-4">
-          Uploaded Emission Records
-        </h2>
-
-        <div className="overflow-x-auto">
-
-          <table className="w-full border-collapse">
-
-            <thead>
-
-              <tr className="bg-gray-200">
-
-                <th className="p-3 text-left">ID</th>
-                <th className="p-3 text-left">Category</th>
-                <th className="p-3 text-left">Activity</th>
-                <th className="p-3 text-left">Quantity</th>
-                <th className="p-3 text-left">Status</th>
-                <th className="p-3 text-left">Validation</th>
-                <th className="p-3 text-left">
-                  Actions
-                </th>
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              {
-                filteredRecords.map((record) => (
-
-                  <tr
-                    key={record.id}
-                    className="border-b"
-                  >
-
-                    <td className="p-3">
-                      {record.id}
-                    </td>
-
-                    <td className="p-3">
-                      {record.category}
-                    </td>
-
-                    <td className="p-3">
-                      {record.activity_type}
-                    </td>
-
-                    <td className="p-3">
-                      {record.quantity} {record.unit}
-                    </td>
-
-                    <td className="p-3">
-
-                      {
-                        record.status === "approved" ? (
-
-                          <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full">
-                            Approved
-                          </span>
-
-                        ) : record.status === "rejected" ? (
-
-                          <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full">
-                            Rejected
-                          </span>
-
-                        ) : (
-
-                          <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
-                            Pending
-                          </span>
-
-                        )
-                      }
-
-                    </td>
-
-                    <td className="p-3">
-
-                      {
-                        record.suspicious_flag
-                          ? "⚠️ Suspicious"
-                          : "✅ Valid"
-                      }
-
-                    </td>
-                    <td className="p-3">
-
-                      {
-                        record.locked ? (
-
-                          <span className="text-gray-500 font-semibold">
-                            Locked
-                          </span>
-
-                        ) : record.suspicious_flag ? (
-
-                          <button
-                            onClick={() =>
-                              rejectRecord(record.id)
-                            }
-                            className="bg-red-600 text-white px-3 py-1 rounded"
-                          >
-                            Reject
-                          </button>
-
-                        ) : (
-
-                          <div className="flex gap-2">
-
-                            <button
-                              onClick={() =>
-                                approveRecord(record.id)
-                              }
-                              className="bg-green-600 text-white px-3 py-1 rounded"
-                            >
-                              Approve
-                            </button>
-
-                            <button
-                              onClick={() =>
-                                rejectRecord(record.id)
-                              }
-                              className="bg-red-600 text-white px-3 py-1 rounded"
-                            >
-                              Reject
-                            </button>
-
-                          </div>
-                        )
-                      }
-
-                    </td>
-                  </tr>
-                ))
-              }
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </div>
-
-      <div className="mt-10 bg-white rounded-xl shadow p-6">
-
-  <h2 className="text-2xl font-bold mb-4">
-    Audit Logs
-  </h2>
-
-  <div className="overflow-x-auto">
-
-    <table className="w-full border-collapse">
-
-      <thead>
-
-        <tr className="bg-gray-200">
-
-          <th className="p-3 text-left">Record</th>
-          <th className="p-3 text-left">Action</th>
-          <th className="p-3 text-left">Old Status</th>
-          <th className="p-3 text-left">New Status</th>
-          <th className="p-3 text-left">Time</th>
-
-        </tr>
-
-      </thead>
-
-      <tbody>
-
-        {
-          auditLogs.map((log) => (
-
-            <tr
-              key={log.id}
-              className="border-b"
-            >
-
-              <td className="p-3">
-                {log.record_name}
-              </td>
-
-              <td className="p-3">
-                {log.action}
-              </td>
-
-              <td className="p-3 capitalize">
-                {log.old_status}
-              </td>
-
-              <td className="p-3 capitalize">
-                {log.new_status}
-              </td>
-
-              <td className="p-3">
-                {
-                  new Date(log.changed_at)
-                    .toLocaleString()
+            {/* Upload Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              {/* SAP Upload */}
+              <div className="bg-white p-6 rounded-xl shadow">
+
+                <h2 className="text-2xl font-semibold mb-4">
+                  SAP Fuel Data
+                </h2>
+
+                <input
+                  type="file"
+                  className="mb-4"
+                  onChange={(e) =>
+                    setSapFile(e.target.files[0])
+                  }
+                />
+
+                <button
+                  onClick={uploadSapFile}
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                  Upload SAP CSV
+                </button>
+
+              </div>
+
+              {/* Utility Upload */}
+              <div className="bg-white p-6 rounded-xl shadow">
+
+                <h2 className="text-2xl font-semibold mb-4">
+                  Utility Data
+                </h2>
+
+                <input
+                  type="file"
+                  className="mb-4"
+                  onChange={(e) =>
+                    setUtilityFile(e.target.files[0])
+                  }
+                />
+
+                <button
+                  onClick={uploadUtilityFile}
+                  className="bg-green-600 text-white px-4 py-2 rounded"
+                >
+                  Upload Utility CSV
+                </button>
+
+              </div>
+
+              {/* Travel Upload */}
+              <div className="bg-white p-6 rounded-xl shadow">
+
+                <h2 className="text-2xl font-semibold mb-4">
+                  Travel Data
+                </h2>
+
+                <input
+                  type="file"
+                  className="mb-4"
+                  onChange={(e) =>
+                    setTravelFile(e.target.files[0])
+                  }
+                />
+
+                <button
+                  onClick={uploadTravelFile}
+                  className="bg-purple-600 text-white px-4 py-2 rounded"
+                >
+                  Upload Travel JSON
+                </button>
+
+              </div>
+
+            </div>
+
+            <div className="flex flex-col md:flex-row gap-4 mt-8 mb-6">
+              {/* Search */}
+              <input
+                type="text"
+                placeholder="Search activity..."
+                value={searchTerm}
+                onChange={(e) =>
+                  setSearchTerm(e.target.value)
                 }
-              </td>
+                className="border p-3 rounded w-full md:w-1/2"
+              />
 
-            </tr>
-          ))
+              {/* Status Filter */}
+              <select
+                value={statusFilter}
+                onChange={(e) =>
+                  setStatusFilter(e.target.value)
+                }
+                className="border p-3 rounded w-full md:w-1/4"
+              >
+
+                <option value="all">
+                  All Status
+                </option>
+
+                <option value="pending">
+                  Pending
+                </option>
+
+                <option value="approved">
+                  Approved
+                </option>
+
+                <option value="rejected">
+                  Rejected
+                </option>
+
+              </select>
+
+            </div>
+
+            {/* Records Table */}
+            <div className="mt-10 bg-white rounded-xl shadow p-6">
+
+              <h2 className="text-2xl font-bold mb-4">
+                Uploaded Emission Records
+              </h2>
+
+              <div className="overflow-x-auto">
+
+                <table className="w-full border-collapse">
+
+                  <thead>
+
+                    <tr className="bg-gray-200">
+
+                      <th className="p-3 text-left">ID</th>
+                      <th className="p-3 text-left">Category</th>
+                      <th className="p-3 text-left">Activity</th>
+                      <th className="p-3 text-left">Quantity</th>
+                      <th className="p-3 text-left">Status</th>
+                      <th className="p-3 text-left">Validation</th>
+                      <th className="p-3 text-left">
+                        Actions
+                      </th>
+                    </tr>
+
+                  </thead>
+
+                  <tbody>
+
+                    {
+                      filteredRecords.map((record) => (
+
+                        <tr
+                          key={record.id}
+                          className="border-b"
+                        >
+
+                          <td className="p-3">
+                            {record.id}
+                          </td>
+
+                          <td className="p-3">
+                            {record.category}
+                          </td>
+
+                          <td className="p-3">
+                            {record.activity_type}
+                          </td>
+
+                          <td className="p-3">
+                            {record.quantity} {record.unit}
+                          </td>
+
+                          <td className="p-3">
+
+                            {
+                              record.status === "approved" ? (
+
+                                <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                                  Approved
+                                </span>
+
+                              ) : record.status === "rejected" ? (
+
+                                <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full">
+                                  Rejected
+                                </span>
+
+                              ) : (
+
+                                <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
+                                  Pending
+                                </span>
+
+                              )
+                            }
+
+                          </td>
+
+                          <td className="p-3">
+
+                            {
+                              record.suspicious_flag
+                                ? "⚠️ Suspicious"
+                                : "✅ Valid"
+                            }
+
+                          </td>
+                          <td className="p-3">
+
+                            {
+                              record.locked ? (
+
+                                <span className="text-gray-500 font-semibold">
+                                  Locked
+                                </span>
+
+                              ) : record.suspicious_flag ? (
+
+                                <button
+                                  onClick={() =>
+                                    rejectRecord(record.id)
+                                  }
+                                  className="bg-red-600 text-white px-3 py-1 rounded"
+                                >
+                                  Reject
+                                </button>
+
+                              ) : (
+
+                                <div className="flex gap-2">
+
+                                  <button
+                                    onClick={() =>
+                                      approveRecord(record.id)
+                                    }
+                                    className="bg-green-600 text-white px-3 py-1 rounded"
+                                  >
+                                    Approve
+                                  </button>
+
+                                  <button
+                                    onClick={() =>
+                                      rejectRecord(record.id)
+                                    }
+                                    className="bg-red-600 text-white px-3 py-1 rounded"
+                                  >
+                                    Reject
+                                  </button>
+
+                                </div>
+                              )
+                            }
+
+                          </td>
+                        </tr>
+                      ))
+                    }
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+
+
+          </div>
         }
+      />
 
-      </tbody>
+      <Route
+        path="/audit-logs"
+        element={<AuditLogs />}
+      />
 
-    </table>
-
-  </div>
-
-</div>
-
-    </div>
+    </Routes>
   );
 }
 

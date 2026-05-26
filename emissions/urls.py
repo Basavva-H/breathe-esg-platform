@@ -8,6 +8,10 @@ from .views import (
     get_records,
     get_audit_logs
 )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 urlpatterns = [
     path(
         'upload/sap/',
@@ -39,5 +43,14 @@ urlpatterns = [
     path(
         'audit-logs/',
         get_audit_logs
+    ),
+    path(
+        'token/',
+        TokenObtainPairView.as_view()
+    ),
+
+    path(
+        'token/refresh/',
+        TokenRefreshView.as_view()
     ),
 ]
