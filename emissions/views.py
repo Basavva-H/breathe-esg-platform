@@ -7,7 +7,10 @@ from django.shortcuts import get_object_or_404
 from .services.sap_processor import process_sap_row
 from .services.utility_processor import process_utility_row
 from .services.travel_processor import process_travel_row
-from .serializers import EmissionRecordSerializer
+from .serializers import (
+    EmissionRecordSerializer,
+    AuditLogSerializer
+)
 from .models import AuditLog
 from .models import (
     Organization,
@@ -191,6 +194,18 @@ def get_records(request):
 
     serializer = EmissionRecordSerializer(
         records,
+        many=True
+    )
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_audit_logs(request):
+
+    logs = AuditLog.objects.all().order_by('-id')
+
+    serializer = AuditLogSerializer(
+        logs,
         many=True
     )
 

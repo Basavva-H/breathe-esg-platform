@@ -5,7 +5,8 @@ from .views import (
     upload_travel_data,
     approve_record,
     reject_record,
-    get_records
+    get_records,
+    get_audit_logs
 )
 urlpatterns = [
     path(
@@ -33,5 +34,10 @@ urlpatterns = [
     path(
         'records/',
         get_records
+    ),
+
+    path(
+        'audit-logs/',
+        get_audit_logs
     ),
 ]

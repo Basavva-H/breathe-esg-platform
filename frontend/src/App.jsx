@@ -9,6 +9,7 @@ function App() {
 
   const [message, setMessage] = useState("");
   const [records, setRecords] = useState([]);
+  const [auditLogs, setAuditLogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [statusFilter, setStatusFilter] = useState("all");
@@ -57,10 +58,26 @@ function App() {
     }
   };
 
+  const fetchAuditLogs = async () => {
+
+  try {
+
+    const response = await axios.get(
+      "https://breathe-esg-backend-b7pe.onrender.com/api/audit-logs/"
+    );
+
+    setAuditLogs(response.data);
+
+  } catch (error) {
+
+    console.error(error);
+  }
+};
   // Load records when page loads
   useEffect(() => {
 
     fetchRecords();
+    fetchAuditLogs();
 
   }, []);
 
@@ -168,6 +185,7 @@ function App() {
       setMessage("Record approved successfully");
 
       fetchRecords();
+      fetchAuditLogs();
 
     } catch (error) {
 
@@ -188,6 +206,7 @@ function App() {
       setMessage("Record rejected successfully");
 
       fetchRecords();
+      fetchAuditLogs();
 
     } catch (error) {
 
@@ -533,6 +552,75 @@ function App() {
         </div>
 
       </div>
+
+      <div className="mt-10 bg-white rounded-xl shadow p-6">
+
+  <h2 className="text-2xl font-bold mb-4">
+    Audit Logs
+  </h2>
+
+  <div className="overflow-x-auto">
+
+    <table className="w-full border-collapse">
+
+      <thead>
+
+        <tr className="bg-gray-200">
+
+          <th className="p-3 text-left">Record</th>
+          <th className="p-3 text-left">Action</th>
+          <th className="p-3 text-left">Old Status</th>
+          <th className="p-3 text-left">New Status</th>
+          <th className="p-3 text-left">Time</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        {
+          auditLogs.map((log) => (
+
+            <tr
+              key={log.id}
+              className="border-b"
+            >
+
+              <td className="p-3">
+                {log.record_name}
+              </td>
+
+              <td className="p-3">
+                {log.action}
+              </td>
+
+              <td className="p-3 capitalize">
+                {log.old_status}
+              </td>
+
+              <td className="p-3 capitalize">
+                {log.new_status}
+              </td>
+
+              <td className="p-3">
+                {
+                  new Date(log.changed_at)
+                    .toLocaleString()
+                }
+              </td>
+
+            </tr>
+          ))
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
 
     </div>
   );
