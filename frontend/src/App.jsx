@@ -8,9 +8,7 @@ import {
 import Login from "./Login";
 import AuditLogs from "./AuditLogs";
 
-const token = localStorage.getItem(
-  "access_token"
-);
+
 function App() {
 
   const [sapFile, setSapFile] = useState(null);
@@ -23,6 +21,9 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [statusFilter, setStatusFilter] = useState("all");
+  const token = localStorage.getItem(
+    "access_token"
+  );
   const totalRecords = records.length;
 
   const approvedCount = records.filter(
@@ -228,16 +229,16 @@ function App() {
 
   if (!token) {
 
-  window.location.href = "/login";
-}
+    window.location.href = "/login";
+  }
   return (
 
     <Routes>
 
       <Route
-  path="/login"
-  element={<Login />}
-/>
+        path="/login"
+        element={<Login />}
+      />
 
       <Route
         path="/"
@@ -261,18 +262,18 @@ function App() {
               </Link>
 
               <button
-          onClick={() => {
+                onClick={() => {
 
-            localStorage.removeItem(
-              "access_token"
-            );
+                  localStorage.removeItem(
+                    "access_token"
+                  );
 
-            window.location.href = "/login";
-          }}
-          className="bg-red-600 text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button>
+                  window.location.href = "/login";
+                }}
+                className="bg-red-600 text-white px-4 py-2 rounded"
+              >
+                Logout
+              </button>
 
             </div>
 
